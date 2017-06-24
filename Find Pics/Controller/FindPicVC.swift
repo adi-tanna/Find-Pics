@@ -141,7 +141,6 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         let strUrl = DC.baseURL + (strSearchText == "" ? "mountains" : strSearchText)
         
         callWebService(strUrl, parameters: nil, methodHttp: .get, completion: { (response) in
-            print(response)
             
             if let tempArrImages = response["items"] as? [[String:Any]] {
                 var arrImages = [Image]()
@@ -151,6 +150,8 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
                     arrImages.append(image)
                 }
                 complition!(arrImages)
+            }else{
+               self.showAlertWithErrorMsg("Opps.. No result found!")
             }
         }, failure: { (error) in
             print(error)
