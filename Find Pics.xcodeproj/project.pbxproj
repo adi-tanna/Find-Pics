@@ -24,6 +24,7 @@
 		F75938A61EFCB70500CD472B /* Characters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75938A41EFCB70500CD472B /* Characters.swift */; };
 		F75938AF1EFCE9C100CD472B /* ImageAnimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75938AE1EFCE9C100CD472B /* ImageAnimate.swift */; };
 		F75938B21EFDAE8D00CD472B /* background_music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F75938B11EFDAE8D00CD472B /* background_music.mp3 */; };
+		F7BCCE371EFEC51000670211 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BCCE361EFEC51000670211 /* Image.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,7 @@
 		F75938A41EFCB70500CD472B /* Characters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Characters.swift; sourceTree = "<group>"; };
 		F75938AE1EFCE9C100CD472B /* ImageAnimate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnimate.swift; sourceTree = "<group>"; };
 		F75938B11EFDAE8D00CD472B /* background_music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background_music.mp3; sourceTree = "<group>"; };
+		F7BCCE361EFEC51000670211 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				F75938891EFB7ABB00CD472B /* SafeJsonObject.swift */,
+				F7BCCE361EFEC51000670211 /* Image.swift */,
 				F75938A31EFCB70500CD472B /* Character_Data.plist */,
 				F75938A41EFCB70500CD472B /* Characters.swift */,
 			);
@@ -246,6 +249,7 @@
 				F75938A21EFCA38900CD472B /* ImageCollectionCell.swift in Sources */,
 				F75938951EFB7ABB00CD472B /* Reachability.swift in Sources */,
 				F75938941EFB7ABB00CD472B /* Constant.swift in Sources */,
+				F7BCCE371EFEC51000670211 /* Image.swift in Sources */,
 				F75938AF1EFCE9C100CD472B /* ImageAnimate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,8 @@
 //
 
 
+
+
 import UIKit
 
 class Characters {
@@ -17,8 +19,8 @@ class Characters {
   var attack: String
   var damage: String
   
-  init(name: String, 
-       title: String, 
+  init(name: String,
+       title: String,
        description: String,
        hitPoints: Int, 
        attack: String, 

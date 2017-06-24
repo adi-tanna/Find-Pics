@@ -18,7 +18,11 @@ struct DC  //DefaultConstant
     
     static let NoInternetMsg = "Looks like you're not connected to Internet."
     
-    static let baseURL = "https://techblog.expedia.com/utility/"
+    static let custom_search_api_key = "AIzaSyA1CYzEYnLrWFUuNfYnaY_IbM28Q2Rswek"
+    
+    static let search_engine_id = "009302593154040575042:idid7syw9ji"
+    
+    static let baseURL = "https://www.googleapis.com/customsearch/v1?key=\(DC.custom_search_api_key)&cx=\(DC.search_engine_id)&searchType=image&q="
 }
 
 struct ScreenSize
@@ -165,9 +169,9 @@ func callWebService(_ url: String, parameters: [String: AnyObject]?, methodHttp:
                     print("This is the URL: \(url)")
                 }
             case .success(let json):
-                
-                if let response = (json as? [String:Any]){
-                    completion(response["hotels"] as AnyObject)
+               
+                if let response = json as? [String:AnyObject]{
+                    completion(response as AnyObject)
                 }else{
                     if let vc = UIApplication.topViewController(){
                         vc.showAlertWithErrorMsg("Looks like something went wrong")

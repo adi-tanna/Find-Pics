@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ImageCollectionCell: UICollectionViewCell {
     
@@ -28,11 +29,11 @@ class ImageCollectionCell: UICollectionViewCell {
         imgResult.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animate)))
     }
     
-    var character: Characters? {
+    var image: Image? {
         didSet {
-            if let strImgName = character?.name{
-                if let img = UIImage(named: strImgName){
-                    imgResult.image = img
+            if let strImgUrl = image?.link{
+                if let urlImage = URL(string: strImgUrl){
+                    imgResult.sd_setImage(with: urlImage, placeholderImage: UIImage(named: "placeholder"), options: .refreshCached)
                 }
             }
         }

@@ -21,7 +21,13 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     
     let strCellIdentifier = "cellIamge"
     
-    let charactersData = Characters.loadCharacters()
+    //let charactersData = Characters.loadCharacters()
+    
+    var arrImages = [Image]()
+    
+    var countOfImages : Int {
+        return arrImages.count
+    }
     
     var player : AVAudioPlayer?
     
@@ -41,6 +47,13 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         setupView()
         
         playBackgroundMusic()
+        
+        callAPItoSearchImages("nature") { (arrResultImages) in
+            self.arrImages = arrResultImages
+            DispatchQueue.main.async(execute: { () -> Void in
+                self.collectionImages.reloadData()
+            })
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,16 +142,25 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     }
     
     //MARK:- Call API to search images
-    func callAPItoSearchImages(_ strSearchText: String, complition:(([AnyObject])-> Void)?) {
+    func callAPItoSearchImages(_ strSearchText: String, complition:(([Image])-> Void)?) {
         
-        let strUrl = ""
-        /*
+        let strUrl = DC.baseURL + (strSearchText == "" ? "nature" : strSearchText)
+        
         callWebService(strUrl, parameters: nil, methodHttp: .get, completion: { (response) in
+            print(response)
             
+            if let tempArrImages = response["items"] as? [[String:Any]] {
+                var arrImages = [Image]()
+                for tempImage in tempArrImages {
+                    let image = Image()
+                    image.setValuesForKeys(tempImage)
+                    arrImages.append(image)
+                }
+                complition!(arrImages)
+            }
         }, failure: { (error) in
             print(error)
         })
-        */
     }
 
     //MARK: - Notification Handler Methods
@@ -180,10 +202,15 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         
     }
     public func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-        
+    
         let strSearchText = searchBar.text
-        
-        print("Images to be searched: \(strSearchText ?? "")")
+        let urlwithPercentEscapes = strSearchText?.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+        callAPItoSearchImages(urlwithPercentEscapes!) { (arrResultImages) in
+            self.arrImages = arrResultImages
+            DispatchQueue.main.async(execute: { () -> Void in
+                self.collectionImages.reloadData()
+            })
+        }
         
         searchBar.text = ""
         searchBar.resignFirstResponder()
@@ -202,13 +229,14 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     
     //MARK:- UICollectionView Data Source
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return charactersData.count
+        return arrImages.count
+        //return charactersData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: strCellIdentifier, for: indexPath) as? ImageCollectionCell
         
-        cell?.character =  charactersData[indexPath.item]
+        cell?.image = arrImages[indexPath.item]
         
         return cell!
     }
