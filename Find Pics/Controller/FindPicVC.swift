@@ -21,8 +21,6 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     
     let strCellIdentifier = "cellIamge"
     
-    //let charactersData = Characters.loadCharacters()
-    
     var arrImages = [Image]()
     
     var countOfImages : Int {
@@ -48,7 +46,7 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         
         playBackgroundMusic()
         
-        callAPItoSearchImages("nature") { (arrResultImages) in
+        callAPItoSearchImages("mountains") { (arrResultImages) in
             self.arrImages = arrResultImages
             DispatchQueue.main.async(execute: { () -> Void in
                 self.collectionImages.reloadData()
@@ -90,13 +88,9 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     //MARK-:- Helper Function
     func setupView() {
         let nib = UINib(nibName: "ImageCollectionCell", bundle: nil)
-        
         collectionImages.register(nib, forCellWithReuseIdentifier: strCellIdentifier)
-        
         let refreshControl = UIRefreshControl()
-        
         refreshControl.addTarget(self, action: #selector(refreshControlDidFire), for: .valueChanged)
-        
         collectionImages?.refreshControl = refreshControl
     }
     
@@ -144,7 +138,7 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     //MARK:- Call API to search images
     func callAPItoSearchImages(_ strSearchText: String, complition:(([Image])-> Void)?) {
         
-        let strUrl = DC.baseURL + (strSearchText == "" ? "nature" : strSearchText)
+        let strUrl = DC.baseURL + (strSearchText == "" ? "mountains" : strSearchText)
         
         callWebService(strUrl, parameters: nil, methodHttp: .get, completion: { (response) in
             print(response)
@@ -245,15 +239,17 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = Int((collectionView.frame.width / columns) - (inset + spacing))
+
+        return CGSize(width: width, height: width)
         
-        var randomSize: Int
-        if isRandom == true {
-            randomSize = 64 * Int(arc4random_uniform(UInt32(3)) + 1)
-        } else {
-            randomSize = width
-        }
-        
-        return CGSize(width: randomSize, height: randomSize)
+//        var randomSize: Int
+//        if isRandom == true {
+//            randomSize = 64 * Int(arc4random_uniform(UInt32(3)) + 1)
+//        } else {
+//            randomSize = width
+//        }
+//        
+//        return CGSize(width: randomSize, height: randomSize)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
