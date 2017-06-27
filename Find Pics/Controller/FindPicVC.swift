@@ -21,6 +21,10 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     
     let strCellIdentifier = "cellIamge"
     
+    var startPoint = 1
+    
+    var strSearchText = "mountains"
+    
     var arrImages = [Image]()
     
     var countOfImages : Int {
@@ -46,7 +50,7 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         
         playBackgroundMusic()
         
-        callAPItoSearchImages("mountains") { (arrResultImages) in
+        callAPItoSearchImages(strSearchText) { (arrResultImages) in
             self.arrImages = arrResultImages
             DispatchQueue.main.async(execute: { () -> Void in
                 self.collectionImages.reloadData()
@@ -120,10 +124,9 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         }
         do{
             player = try AVAudioPlayer(contentsOf: urlMusic)
-            
             player?.delegate = self;
-            
             player?.play()
+            
             if isMute{
                 self.player?.volume = 0.0
             }else{
@@ -135,10 +138,22 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
         }
     }
     
+    func loadMoreImages()  {
+        
+        let urlwithPercentEscapes = strSearchText.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+        startPoint += 10
+        callAPItoSearchImages(urlwithPercentEscapes!) { (arrResultImages) in
+            self.arrImages.append(contentsOf: arrResultImages)
+            DispatchQueue.main.async(execute: { () -> Void in
+                self.collectionImages.reloadData()
+            })
+        }
+    }
+    
     //MARK:- Call API to search images
     func callAPItoSearchImages(_ strSearchText: String, complition:(([Image])-> Void)?) {
         
-        let strUrl = DC.baseURL + (strSearchText == "" ? "mountains" : strSearchText)
+        let strUrl = DC.baseURL + (strSearchText == "" ? "mountains" : strSearchText) + "&lowRange=\(startPoint)"
         
         callWebService(strUrl, parameters: nil, methodHttp: .get, completion: { (response) in
             
@@ -198,8 +213,11 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     }
     public func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
     
-        let strSearchText = searchBar.text
-        let urlwithPercentEscapes = strSearchText?.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
+        guard let searchText = searchBar.text else{
+            return
+        }
+        strSearchText = searchText
+        let urlwithPercentEscapes = strSearchText.addingPercentEncoding( withAllowedCharacters: .urlQueryAllowed)
         callAPItoSearchImages(urlwithPercentEscapes!) { (arrResultImages) in
             self.arrImages = arrResultImages
             DispatchQueue.main.async(execute: { () -> Void in
@@ -262,5 +280,11 @@ class FindPicVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return lineSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if(indexPath.item == arrImages.count-1 && arrImages.count > indexPath.item){
+            loadMoreImages()
+        }
     }
 }
